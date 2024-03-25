@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    @keyframes slideInFromLeft {
+        0% {
+          transform: translateX(-20%);
+          opacity: 0;
+        }
+        25% {
+          transform: translateX(-10%);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translateX(0%);
+          opacity: 0.7;
+        }
+        75% {
+          transform: translateX(10%);
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateX(30%);
+          opacity: 1;
+        }
+      }
+      
+      .anim {
+        animation: slideInFromLeft 2s linear infinite; 
+      }
+      
+}

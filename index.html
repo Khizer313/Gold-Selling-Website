@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slick Slider</title>
+    <link rel="stylesheet" href="output.css">
+     <!-- slick slider -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+     <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+   <style>
+    .slick-next:before {
+    content: '→';
+    font-size: 50px;
+    margin-right: 5px;
+}
+.slick-prev:before {
+    content: '←';
+    font-size: 50px;
+    margin-right: 15px;
+}
+@media (max-width:500px) {
+  .slick-next:before {
+    content: '→';
+    font-size: 28px;
+    margin-right: 5px;
+}
+.slick-prev:before {
+    content: '←';
+    font-size: 28px;
+    margin-right: 5px;
+} 
+.carousel{
+  margin-left: 10px;
+}
+}
+   </style>
+   
+</head>
+<body class="overflow-x-hidden">
+  
+   <!---------------------------   -----  navbar  ----   ---------------------------------->
+
+
+   <div class="flex justify-center items-center px-16 py-7 text-xl bg-[#1E1E1E] text-zinc-100 max-md:px-5">
+    <div class="flex gap-5 justify-between w-full max-w-[1348px] max-md:flex-wrap max-md:max-w-full">
+      <img loading="lazy" src="../img/logo.png" class="logo shrink-0 aspect-[1.49] w-[88px] xl:w-[120px] transition duration-300 ease-in-out transform hover:scale-150 cursor-pointer" />
+     
+      <div class="hidden float-end xl:flex gap-5 justify-center px-4 my-auto max-md:flex-wrap ">
+        <ul class="list-none flex   py-4 shadow-lg transform  transition duration-300 ease-in-out" id="sidebar">
+          <li class="mx-4 my-2 transition duration-300 ease-in-out transform hover:scale-105"><a href="#">How To Set Gold</a></li>
+          <li class="mx-4 my-2 transition duration-300 ease-in-out transform hover:scale-105"><a href="#">What We Buy</a></li>
+          <li class="mx-4 my-2 transition duration-300 ease-in-out transform hover:scale-105"><a href="#">Services</a></li>
+          <li class="mx-4 my-2 transition duration-300 ease-in-out transform hover:scale-105"><a href="#">Track your Gold</a></li>
+          <li class="mx-4 my-2 transition duration-300 ease-in-out transform hover:scale-105"><a href="#">About Us</a></li>
+          <li class="mx-4 my-2 transition duration-300 ease-in-out transform hover:scale-105"><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- sidebar component -->
+<div x-data="setup()" x-init="$refs.loading.classList.add('hidden');">
+  <div class="flex xl:hidden antialiased ">
+    <!-- Loading screen -->
+    <div
+      x-ref="loading"
+      class="fixed inset-0 z-50 flex items-center justify-center text-2xl font-semibold text-white bg-blue-600"
+    >
+      Loading.....
+    </div>
+
+    <!-- Sidebar -->
+    <div
+      x-transition:enter="transform transition-transform duration-300"
+      x-transition:enter-start="-translate-x-full"
+      x-transition:enter-end="translate-x-0"
+      x-transition:leave="transform transition-transform duration-300"
+      x-transition:leave-start="translate-x-0"
+      x-transition:leave-end="-translate-x-full"
+      x-show="isSidebarOpen"
+      class="fixed inset-y-0 z-10 flex w-72 sm:w-80"
+    >
+      <!-- Curvy shape -->
+      <svg
+        class="absolute inset-0 w-full h-full text-white"
+        style="filter: drop-shadow(10px 0 10px #00000030)"
+        preserveAspectRatio="none"
+        viewBox="0 0 309 800"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M268.487 0H0V800H247.32C207.957 725 207.975 492.294 268.487 367.647C329 243 314.906 53.4314 268.487 0Z"
+        />
+      </svg>
+      <!-- Sidebar content -->
+      <div class="z-10 flex flex-col flex-1">
+        <div class="flex items-center justify-between flex-shrink-0 w-64 p-4">
+          <!-- Logo -->
+          <a href="#">
+            <img src="../img/logo.png" alt="">
+          </a>
+          <!-- Close btn -->
+          <button @click="isSidebarOpen = false" class="p-1 rounded-lg focus:outline-none focus:ring">
+            <svg
+              class="w-6 h-6"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span class="sr-only">Close sidebar</span>
+          </button>
+        </div>
+        <nav class="flex flex-col flex-1 w-64 p-4 mt-4">
+          <a href="#" class="flex flex-col gap-10 items-center space-x-2">
+            <span class="hover:text-blue-500 transition duration-300 ease-in-out">How To Set Gold</span>
+            <span class="hover:text-blue-500 transition duration-300 ease-in-out">What We Buy</span>
+            <span class="hover:text-blue-500 transition duration-300 ease-in-out">Services</span>
+            <span class="hover:text-blue-500 transition duration-300 ease-in-out">About Us</span>
+            <span class="hover:text-blue-500 transition duration-300 ease-in-out">Contact Us</span>
+        </a>
+        
+        </nav>
+        <div class="flex-shrink-0 p-4">
+          <button class="flex items-center space-x-2">
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <main class="flex flex-col items-center justify-center flex-1">
+      <!-- Page content -->
+      <button @click="isSidebarOpen = true" class="absolute p-2 text-white bg-black rounded-lg top-5 
+      font-bold text-2xl " style="margin-left: 60%;">
+      <span class="hover:text-blue-500 transition duration-300 ease-in-out text-3xl">
+        <!-- Font Awesome Hamburger Menu Icon -->
+        <i class="fas fa-bars"></i>
+      </span>
+      </button>
+      <h1 class="sr-only">Home</h1>
+      
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.1/alpine.js"></script>
+<script>
+    const setup = () => {
+    return {
+            isSidebarOpen: false,
+        }
+    }
+</script>
+    
+
+   <!---------------------------   -----  header  ----   ---------------------------------->
+<div class="flex flex-col bg-[#000000]">
+  <!------------   hero ------------>
+  <div class="w-full max-md:max-w-full mb-20">
+    <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+      <div class="flex flex-col w-[42%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col self-stretch px-5 my-auto text-xl text-white max-md:mt-10 max-md:max-w-full"
+        >
+          <div class="text-5xl font-bold max-md:max-w-full max-md:text-4xl">
+            Get access to the most secure method of buying and selling gold.
+          </div>
+          <div class="anim shrink-0 mt-4 w-48 h-2 bg-yellow-500"></div>
+          <div
+            class="mt-12 mr-7 leading-8 max-md:mt-10 max-md:mr-2.5 max-md:max-w-full"
+          >
+            In order to get the most out of your money, we at Gold Inc. strive
+            to make your experience with gold straightforward, transparent, and
+            reliable.
+          </div>
+          <div class="flex gap-5 mt-8 font-semibold leading-[150%] max-md:flex-wrap max-md:mt-5">
+            <button class="grow justify-center px-7 py-4 rounded-md border-2 border-yellow-500 border-solid w-fit max-md:pr-4 max-md:pl-2 hover:bg-yellow-500 hover:text-white transition duration-300">
+              Learn More
+            </button>
+            <button class="grow justify-center px-6 py-4 bg-yellow-500 rounded-md w-fit max-md:px-2 hover:bg-yellow-600 hover:text-white transition duration-300">
+              Sell Your Gold
+            </button>
+          </div>
+          
+        </div>
+      </div>
+      <div class="flex flex-col ml-5 w-[58%] max-md:ml-0 max-md:w-full">
+        <img
+          loading="lazy"
+          srcset="https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/dc38d520275fceb6d39e827a5597e058ebf98be8b64a307e0ff365707015f7ce?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+          class="grow w-full aspect-[0.97] max-md:mt-10 max-md:max-w-full"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!------------   feature ------------>
+ 
+
+  <div class="flex flex-col m-2 p-5 items-center bg-yellow-500 rounded-xl max-w-[1322px] max-md:max-w-full">
+
+    <div class="flex flex-col w-full max-w-[1322px] max-md:max-w-full">
+      <div class="flex gap-5 items-start w-full font-semibold flex-wrap max-md:flex-col max-md:pr-2.5 max-md:max-w-full">
+        <div class="flex-auto self-end mt-3 text-xl sm:text-2xl lg:text-3xl text-black max-md:max-w-full">
+          Get Instant Prices On Your Gold
+        </div>
+        <div class="flex gap-2 self-start text-lg sm:text-xl lg:text-2xl text-red-600">
+          <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/57edef846e0f779e9ed27c70e39d30c192cf9afe3919ad118632824ccc967d8b?apiKey=538b5b01ac4747e58a4624d4898f11ff&" class="shrink-0 w-6 aspect-square" />
+          <div class="my-auto">LIVE RATE</div>
+        </div>
+      </div>
+      <div class="flex gap-5 justify-between items-center mt-5 flex-wrap max-md:flex-col max-md:pr-2.5 max-md:mt-5 max-md:max-w-full">
+        <div class="flex flex-col self-stretch my-auto text-lg sm:text-xl lg:text-2xl font-semibold">
+          <div class="text-black">BUYING PRICE</div>
+          <div class="justify-center px-2.5 py-1.25 mt-3 whitespace-nowrap border-solid border-[1.5px] border-white border-opacity-30 text-stone-900">
+            24K.999.0
+          </div>
+        </div>
+        <div class="flex flex-col self-stretch my-auto text-black">
+          <div class="text-lg sm:text-xl lg:text-2xl font-semibold">5331.8/gm</div>
+          <div class="flex gap-1.25 mt-2 text-base sm:text-lg lg:text-xl">
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/faf64015c24b331b9df48b36841b3b273aa0f0eb8ed82d8f98b55f56a9f77eed?apiKey=538b5b01ac4747e58a4624d4898f11ff&" class="shrink-0 my-auto aspect-[1.18] fill-red-600 w-[8px]" />
+            <div class="flex-auto">0.30% since yesterday</div>
+          </div>
+        </div>
+        <div class="flex flex-col self-stretch text-lg sm:text-xl lg:text-2xl font-semibold whitespace-nowrap text-black text-opacity-30">
+          <div class="justify-center items-start mb-2 px-3 py-3.5 rounded-md bg-zinc-300 bg-opacity-50 max-md:px-2.5">
+            Grams
+          </div>
+          <div class="justify-center items-start px-3 py-3.5 mt-1.75 rounded-md bg-zinc-300 bg-opacity-50 max-md:px-2.5">
+            Amount
+          </div>
+        </div>
+        <button class="justify-center items-center self-stretch px-8 py-4 my-auto text-lg sm:text-xl lg:text-2xl font-semibold leading-8 text-white bg-red-600 rounded-md max-md:px-2.5 hover:bg-yellow-500 hover:border-2 hover:border-red-600">
+          Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+</div>
+
+
+   <!---------------------------   -----  Know about us  ----   ---------------------------------->
+
+<div class="flex flex-col items-center p-20 bg-stone-900 max-md:px-5">
+  <div class="mt-3 text-4xl font-semibold text-white">Why Us</div>
+  <div
+    class="anim shrink-0 mt-3 bg-yellow-500 border-yellow-500 border-solid border-[5px] h-[5px] w-[95px]"
+  ></div>
+  <div class="mt-20 w-full max-w-[1528px] max-md:mt-10 max-md:max-w-full">
+    <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+      <div class="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col grow px-8 py-7 w-full bg-neutral-800 max-md:px-5 max-md:mt-5 max-md:max-w-full"
+        >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6a98eff5b0903d475c2b98c0296bfcc3437c4f7b805349e0397f265826a28a54?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+            class="aspect-square w-[60px]"
+          />
+          <div
+            class="mt-6 text-3xl font-semibold text-white text-opacity-80 max-md:max-w-full"
+          >
+            Affordability
+          </div>
+          <div
+            class="mt-7 text-xl text-white text-opacity-50 max-md:max-w-full"
+          >
+            We provide the most affordable prices for all products in comparison
+            to current market rates.
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col grow px-9 py-7 w-full bg-neutral-800 max-md:px-5 max-md:mt-5 max-md:max-w-full"
+        >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/ccf3d54dec7028e11bc72df6884dd5b2f64f5e45fbd0166c300e6c1292dbe6cc?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+            class="aspect-square w-[60px]"
+          />
+          <div
+            class="mt-6 text-3xl font-semibold text-white text-opacity-80 max-md:max-w-full"
+          >
+            Systematic Growth
+          </div>
+          <div
+            class="mt-8 text-xl text-white text-opacity-50 max-md:max-w-full"
+          >
+            You can achieve consistent growth of your investment with our SIP in
+            Gold with no lock-in time.
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col grow p-7 w-full bg-neutral-800 max-md:px-5 max-md:mt-5 max-md:max-w-full"
+        >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/109f03f546099bb029c24291939d4f4582a8a93d0fbedc7938944872dcfacb93?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+            class="aspect-square w-[60px]"
+          />
+          <div
+            class="mt-6 text-3xl font-semibold text-white text-opacity-80 max-md:max-w-full"
+          >
+            Guaranteed Purity
+          </div>
+          <div
+            class="mt-7 text-xl text-white text-opacity-50 max-md:max-w-full"
+          >
+            We pledge to provide you with the cleanest 24-karat products that
+            are 99.9% pure and BIS. Hallmark
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-6 w-full max-w-[1528px] max-md:max-w-full">
+    <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+      <div class="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col grow px-8 py-7 w-full bg-neutral-800 max-md:px-5 max-md:mt-5 max-md:max-w-full"
+        >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/84c066900a74f065c032d7fe20e3cb1db9b920d05816ec9d3da8ff71b13c1330?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+            class="aspect-square w-[60px]"
+          />
+          <div
+            class="mt-5 text-3xl font-semibold text-white text-opacity-80 max-md:max-w-full"
+          >
+            Security
+          </div>
+          <div
+            class="mt-7 text-xl text-white text-opacity-50 max-md:max-w-full"
+          >
+            We supply our clients with the greatest and most reliable vault
+            keepers who offer storage and transaction security.
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col grow px-9 pt-7 pb-14 w-full bg-neutral-800 max-md:px-5 max-md:mt-5 max-md:max-w-full"
+        >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/3601155ecdb8432d15a1eceafc1a39ee0fae35531eca3e116812a73faf0ebc66?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+            class="aspect-square w-[60px]"
+          />
+          <div
+            class="mt-5 text-3xl font-semibold text-white text-opacity-80 max-md:max-w-full"
+          >
+            Accessibility
+          </div>
+          <div
+            class="mt-7 text-xl text-white text-opacity-50 max-md:max-w-full"
+          >
+            We offer all services to our clients around-the-clock, everywhere
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col grow px-8 pt-7 pb-14 w-full bg-neutral-800 max-md:px-5 max-md:mt-5 max-md:max-w-full"
+        >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d79a5ac268d4affbf9a8993183b02da65ba5c87b59241d6ed3f71251b5f642d?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+            class="aspect-square w-[60px]"
+          />
+          <div
+            class="mt-5 text-3xl font-semibold text-white text-opacity-80 max-md:max-w-full"
+          >
+            High Liquidity
+          </div>
+          <div
+            class="mt-6 text-xl text-white text-opacity-50 max-md:max-w-full"
+          >
+            You can use Us to purchase, sell, gift, and store anything online at
+            any time.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+   <!---------------------------   -----  How It Works  ----   ---------------------------------->
+   <div
+  class="flex justify-center items-center px-16 py-20 bg-neutral-800 max-md:px-5"
+>
+  <div
+    class="flex flex-col items-center mt-4 w-full max-w-[1410px] max-md:max-w-full"
+  >
+    <div class="text-4xl font-semibold text-white">How It Works</div>
+    <div
+      class="mt-9 text-xl text-center text-white text-opacity-50 w-[1012px] max-md:max-w-full"
+    >
+      In only 4 steps, you can swiftly and worry-free sell your gold online. You
+      can follow the status of your gold from the comfort of your home by
+      tracking the status and location of your gold
+    </div>
+    <div class="self-stretch mt-20 max-md:mt-10 max-md:max-w-full">
+      <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+        <div class="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col grow max-md:mt-10 ">
+            <div
+              class="justify-center items-center px-8 text-3xl font-bold text-center text-black whitespace-nowrap bg-yellow-500 rounded-full h-[72px] w-[72px] max-md:px-5 pt-4"
+            >
+              1
+            </div>
+            <div class="mt-8 text-2xl font-semibold text-white text-opacity-80">
+              Request your to sell
+            </div>
+            <div class="mt-14 text-xl text-white text-opacity-50 max-md:mt-10">
+              There is no-obligation so give us a try
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col grow max-md:mt-10">
+            <div
+              class="justify-center items-center px-7 text-3xl font-bold text-center text-black whitespace-nowrap bg-yellow-500 rounded-full h-[72px] w-[72px] max-md:px-5 pt-4"
+            >
+              2
+            </div>
+            <div class="mt-8 text-2xl font-semibold text-white text-opacity-80">
+              Package and ship your items
+            </div>
+            <div class="mt-8 text-xl text-white text-opacity-50">
+              We supply free and insured shipping via FedEx**
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col grow max-md:mt-10">
+            <div
+              class="justify-center items-center px-7 text-3xl font-bold text-center text-black whitespace-nowrap bg-yellow-500 rounded-full h-[72px] w-[72px] max-md:px-5 pt-4"
+            >
+              3
+            </div>
+            <div class="mt-8 text-2xl font-semibold text-white text-opacity-80">
+              Accept offer and get paid
+            </div>
+            <div class="mt-6 text-xl text-white text-opacity-50">
+              We have the highest payouts and there is NO Obligation
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col grow max-md:mt-10">
+            <div
+              class="justify-center items-center px-7 text-3xl font-bold text-center text-black whitespace-nowrap bg-yellow-500 rounded-full h-[72px] w-[72px] max-md:px-5 pt-4"
+            >
+              4
+            </div>
+            <div class="mt-8 text-2xl font-semibold text-white text-opacity-80">
+              Track your items
+            </div>
+            <div class="mt-14 text-xl text-white text-opacity-50 max-md:mt-10">
+              Track the location of your product with ease
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!---------------------------   -----  what we sell ----   ---------------------------------->
+
+    <div
+    class="flex justify-center items-center px-16 py-20 bg-stone-900 max-md:px-5"
+  >
+    <div class="flex flex-col mt-5 w-full max-w-[1404px] max-md:max-w-full">
+      <div class="self-center text-3xl font-semibold text-white">
+        What We Sell
+      </div>
+      <div
+        class="self-center mt-7 text-xl font-medium text-yellow-500 max-md:max-w-full"
+      >
+        Sell your gold and purchase more than just one piece
+      </div>
+      <div class="mt-28 max-md:mt-10 max-md:max-w-full">
+        <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+          <div class="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow items-center text-2xl font-semibold max-md:mt-10"
+            >
+              <img
+                src="../img/s1.png"
+                class="max-w-full aspect-[0.96] w-[166px]"
+              />
+              <div class="self-stretch mt-10 text-zinc-300 max-md:mt-10">
+                DG 1 Gram Gold Coin
+              </div>
+              <div class="mt-7 text-yellow-500">24k (99.99%)</div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow items-center text-2xl font-semibold max-md:mt-10"
+            >
+              <img
+                loading="lazy"
+                src="../img/s2.png"  
+                              class="max-w-full aspect-[0.96] w-[166px]"
+              />
+              <div class="self-stretch mt-10 text-zinc-300 max-md:mt-10">
+                DG 2 Gram Gold Coin
+              </div>
+              <div class="mt-7 text-yellow-500">24k (99.99%)</div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow items-center text-2xl font-semibold max-md:mt-10"
+            >
+              <img
+                loading="lazy"
+                src="../img/s3.png"
+                class="max-w-full aspect-[0.96] w-[166px]"
+              />
+              <div class="self-stretch mt-10 text-zinc-300 max-md:mt-10">
+                DG 2 Gram Gold Coin
+              </div>
+              <div class="mt-7 text-yellow-500">24k (99.99%)</div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow items-center text-2xl font-semibold max-md:mt-10"
+            >
+              <img
+                loading="lazy"
+                src="../img/s4.png"
+                class="max-w-full aspect-[0.96] w-[166px]"
+              />
+              <div class="self-stretch mt-10 text-zinc-300 max-md:mt-10">
+                DG 1 Gram Gold Coin
+              </div>
+              <div class="mt-7 text-yellow-500">24k (99.99%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+    <!---------------------------   -----  about   ----   ---------------------------------->
+    <div
+  class="flex justify-center items-center px-16 py-20 bg-neutral-800 max-md:px-5"
+>
+  <div class="mt-20 w-full max-w-[1522px] max-md:mt-10 max-md:max-w-full">
+    <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+      <div class="flex flex-col w-[56%] max-md:ml-0 max-md:w-full">
+        <img
+          loading="lazy"
+          src="../img/about.png"
+        />
+      </div>
+      <div class="flex flex-col ml-5 w-[44%] max-md:ml-0 max-md:w-full">
+        <div
+          class="flex flex-col self-stretch my-auto text-xl font-semibold text-white max-md:mt-10 max-md:max-w-full"
+        >
+          <div class="text-4xl max-md:max-w-full">About Us</div>
+          <div class="anim shrink-0 mt-7 bg-yellow-500 h-[5px] w-[113px]"></div>
+          <div class="mt-8 text-white text-opacity-50 max-md:max-w-full">
+            We are the most reputable online marketplace for buying, selling,
+            and storing gold and silver at real-time market values. Purchases
+            can be made for as little as $ 50. Additionally, we provide No
+            Locking Period SIP in Gold with as little as $ 500 through
+            reoccurring payments.
+            <br />
+            <br />
+            We provide 24 Karat Pure Gold that is 99.9% pure along with
+            certifications as our way of assuring you of the quality.
+          </div>
+          <button
+            class="justify-center items-center px-7 py-3 mt-14 max-w-full rounded-md border-2 border-yellow-500 border-solid leading-[150%] w-[238px] max-md:px-5 max-md:mt-10 hover:bg-yellow-500"
+          >
+            Read More
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+    <!---------------------------   -----  carousel  ----   ---------------------------------->
+    
+    <div
+    class="  flex justify-center items-center px-16 py-20 bg-stone-900 max-md:px-5"
+  >
+    <div
+      class=" flex flex-col items-center mt-7 w-full  max-w-[1524px] max-md:max-w-full"
+    >
+      <div
+        class="text-4xl font-semibold text-white leading-[54px] max-md:max-w-full"
+      >
+        What Our Clients Say About Us
+      </div>
+      <div class=" self-stretch mt-28 max-md:mt-10 max-md:max-w-full p-1 ">
+        <div class="carousel flex gap-3 max-md:flex-col max-md:gap-0 p-1 w-[16rem] md:w-auto ">
+          <div class="flex flex-col w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow px-5 pt-7 pb-5 mx-auto  shadow-lg bg-neutral-800 max-md:px-5 max-md:mt-3.5 w-[15rem]"
+            >
+              <div class="flex gap-5 justify-between px-0.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/267994ea3ad21ad94a497301c174e42806a09f7417d93bbe67234353989d80e6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Sam I.</div>
+                  <div class="mt-5 text-xl text-white text-opacity-50">
+                    2022-03-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Great Guide
+                <br />
+                Nous avions passé une excellente journée avec Mole Boy! Il nous a
+                fait découvrir plusieus choses sur le trajet de Mole à Kumasi
+                comme les cascades
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow px-5 pt-7 pb-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:px-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between px-0.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc4d21d05a93c01ed75b9002462476c26eff5e7193577dc46803da575efcb116?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Emile A</div>
+                  <div class="mt-5 text-xl text-white text-opacity-50">
+                    2022-05-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                My experience with mole boy is simply awesome.
+                <br />
+                This guy is simply amazing. I drove some Canadian tourists to the
+                game reserve and mole boy was splendid in receiving
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow px-6 pt-9 pb-5 mx-auto w-[16rem] shadow-lg bg-neutral-800 max-md:px-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between px-px leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/a76414c09e06dc58a0012e9354a19277d2b0975320ddc62dc65fb0a4115d7385?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Awudu S</div>
+                  <div class="mt-5 text-xl text-white text-opacity-50">
+                    2022-01-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 text-xl leading-8 text-white text-opacity-50">
+                This Guy is in the list of amazing Humans
+                <br />
+                We did a 3 Days/2 Night tour with Mole Boy and it was one of the
+                best tour experience we had booked,wow this guy could talk
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow pt-7 pr-9 pb-5 pl-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:pr-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between pr-1.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebbc797c5450ebca0b435f7c1cfc26db307a5f722380cc9fcb4af9855b0ffa6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Peter Q</div>
+                  <div class="mt-4 text-xl text-white text-opacity-50">
+                    2021-12-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Recommend Mole boy to everybody!
+                <br />
+                We booked a transfer with Mole boy after Zaina lodge recommended
+                them to us. And I'd recommend it to everybody
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow pt-7 pr-9 pb-5 pl-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:pr-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between pr-1.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebbc797c5450ebca0b435f7c1cfc26db307a5f722380cc9fcb4af9855b0ffa6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Peter Q</div>
+                  <div class="mt-4 text-xl text-white text-opacity-50">
+                    2021-12-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Recommend Mole boy to everybody!
+                <br />
+                We booked a transfer with Mole boy after Zaina lodge recommended
+                them to us. And I'd recommend it to everybody
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow pt-7 pr-9 pb-5 pl-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:pr-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between pr-1.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebbc797c5450ebca0b435f7c1cfc26db307a5f722380cc9fcb4af9855b0ffa6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Peter Q</div>
+                  <div class="mt-4 text-xl text-white text-opacity-50">
+                    2021-12-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Recommend Mole boy to everybody!
+                <br />
+                We booked a transfer with Mole boy after Zaina lodge recommended
+                them to us. And I'd recommend it to everybody
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow pt-7 pr-9 pb-5 pl-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:pr-5 max-md:mt-3.5 "
+            >
+              <div class="flex gap-5 justify-between pr-1.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebbc797c5450ebca0b435f7c1cfc26db307a5f722380cc9fcb4af9855b0ffa6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Peter Q</div>
+                  <div class="mt-4 text-xl text-white text-opacity-50">
+                    2021-12-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Recommend Mole boy to everybody!
+                <br />
+                We booked a transfer with Mole boy after Zaina lodge recommended
+                them to us. And I'd recommend it to everybody
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow pt-7 pr-9 pb-5 pl-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:pr-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between pr-1.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebbc797c5450ebca0b435f7c1cfc26db307a5f722380cc9fcb4af9855b0ffa6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Peter Q</div>
+                  <div class="mt-4 text-xl text-white text-opacity-50">
+                    2021-12-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Recommend Mole boy to everybody!
+                <br />
+                We booked a transfer with Mole boy after Zaina lodge recommended
+                them to us. And I'd recommend it to everybody
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col ml-5 w-3/12 max-md:ml-0 max-md:w-full">
+            <div
+              class="flex flex-col grow pt-7 pr-9 pb-5 pl-5 mx-auto w-[15rem] shadow-lg bg-neutral-800 max-md:pr-5 max-md:mt-3.5"
+            >
+              <div class="flex gap-5 justify-between pr-1.5 leading-[150%]">
+                <img
+                  loading="lazy"
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/7ebbc797c5450ebca0b435f7c1cfc26db307a5f722380cc9fcb4af9855b0ffa6?apiKey=538b5b01ac4747e58a4624d4898f11ff&"
+                  class="shrink-0 max-w-full aspect-square w-[100px]"
+                />
+                <div class="flex flex-col my-auto">
+                  <div class="text-3xl font-bold text-zinc-300">Peter Q</div>
+                  <div class="mt-4 text-xl text-white text-opacity-50">
+                    2021-12-01
+                  </div>
+                </div>
+              </div>
+              <div class="mt-7 text-xl leading-8 text-white text-opacity-50">
+                Recommend Mole boy to everybody!
+                <br />
+                We booked a transfer with Mole boy after Zaina lodge recommended
+                them to us. And I'd recommend it to everybody
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+    <!---------------------------   -----  footer  ----   ---------------------------------->
+
+    <div class="px-20 py-16 bg-yellow-500 max-md:px-5">
+      <div class="flex gap-5 max-md:flex-col max-md:gap-0">
+        <div class="flex flex-col w-[49%] max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col grow max-md:mt-10">
+            <div class="text-2xl font-bold text-zinc-800">Header</div>
+            <div class="mt-5 text-lg text-zinc-800">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ornare
+              cursus se
+              <span class="text-zinc-800">
+                d nunc eget dictum Sed ornare cursus sed nunc eget dictumd nunc eget
+                dictum Sed ornare cursus sed nunc eget dictum
+              </span>
+            </div>
+           
+            <div class="flex gap-2.5 p-2.5 mt-8 text-sm whitespace-nowrap border border-solid bg-zinc-800 border-zinc-300 text-zinc-300 relative">
+              <input type="text" class="border-none outline-none bg-transparent text-zinc-300 placeholder-zinc-300 pl-6 py-2" placeholder="Button">
+              <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/cc535002f7f971dff447c4acbb16811a7d6cd382c56162fa85cd3fa2e47276ee?apiKey=538b5b01ac4747e58a4624d4898f11ff&" class="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4" />
+            </div>
+            
+          
+            <div class="flex gap-5  justify-between self-start p-0 md:p-2.5 mt-6">
+              <i class="fab fa-facebook-square icon w-1/2 h-1/2  md:w-24 md:h-24 transition-all duration-300 transform hover:scale-125 cursor-pointer"></i>
+              <i class="fab fa-twitter-square icon  w-1/2 h-1/2  md:w-24 md:h-24 transition-all duration-300 transform hover:scale-125 cursor-pointer"></i>
+              <i class="fab fa-instagram-square icon  w-1/2 h-1/2  md:w-24 md:h-24 transition-all duration-300 transform hover:scale-125 cursor-pointer"></i>
+              <i class="fab fa-linkedin icon  w-1/2 h-1/2  md:w-24 md:h-24 transition-all duration-300 transform hover:scale-125 cursor-pointer"></i>
+            </div>
+            
+            
+            
+          </div>
+        </div>
+        <div class="flex flex-col ml-5 w-[38%] max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col text-base font-bold text-zinc-800 max-md:mt-10">
+            <div class="text-2xl">Header Text</div>
+            <div class="flex gap-2.5 py-2.5 mt-5 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+            <div class="flex gap-2.5 py-2.5 mt-6 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+            <div class="flex gap-2.5 py-2.5 mt-5 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+            <div class="flex gap-2.5 py-2.5 mt-5 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col ml-5 w-[13%] max-md:ml-0 max-md:w-full">
+          <div class="flex flex-col text-base font-bold text-zinc-800 max-md:mt-10">
+            <div class="text-2xl">Header Text</div>
+            <div class="flex gap-2.5 py-2.5 mt-5 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+            <div class="flex gap-2.5 py-2.5 mt-6 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+            <div class="flex gap-2.5 py-2.5 mt-6 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+            <div class="flex gap-2.5 py-2.5 mt-5 whitespace-nowrap">
+             <i class="fa-solid fa-angle-right" style="loading: lazy; width: 18px; height: 18px;"></i>
+
+              <a href="">Button</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.1/jquery-migrate.min.js" integrity="sha512-KgffulL3mxrOsDicgQWA11O6q6oKeWcV00VxgfJw4TcM8XRQT8Df9EsrYxDf7tpVpfl3qcYD96BpyPvA4d1FDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  
+
+</script> 
+
+
+<script>
+    $(document).ready(function(){
+    $('.carousel').slick({
+        infinite: true,
+         slidesToShow: 3,
+slidesToScroll: 1,
+  dots: true,
+    })
+  })
+  $('.carousel').slick({
+  dots: true,
+  infinite: false,
+  speed: 300,
+  slidesToShow: 4,
+  slidesToScroll: 4,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        infinite: true,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots:false
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots:false
+
+      }
+    }
+    // You can unslick at a given breakpoint now by adding:
+    // settings: "unslick"
+    // instead of a settings object
+  ]
+});
+</script>
+    
+
+</body>
+</html>
